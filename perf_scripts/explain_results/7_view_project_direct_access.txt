@@ -1,0 +1,10 @@
+EXPLAIN
+-> Table scan on <temporary>  (cost=17.5..20.1 rows=20) (actual time=0.449..0.453 rows=8 loops=1)
+    -> Temporary table with deduplication  (cost=17.3..17.3 rows=20) (actual time=0.447..0.447 rows=8 loops=1)
+        -> Nested loop inner join  (cost=12.7 rows=20) (actual time=0.14..0.361 rows=8 loops=1)
+            -> Nested loop inner join  (cost=5.7 rows=20) (actual time=0.107..0.238 rows=8 loops=1)
+                -> Index lookup on gum using idx_user_uuid (user_uuid = 'eedfad02-c457-11f0-9fcf-c0a705219895')  (cost=1.75 rows=5) (actual time=0.0622..0.0663 rows=5 loops=1)
+                -> Filter: ((grm.project_uuid is not null) and (grm.project_uuid is not null))  (cost=0.406 rows=4.01) (actual time=0.0309..0.0335 rows=1.6 loops=5)
+                    -> Covering index lookup on grm using unique_group_role_context (group_id = gum.group_id)  (cost=0.406 rows=4.64) (actual time=0.0267..0.0319 rows=5 loops=5)
+            -> Single-row index lookup on p using PRIMARY (project_uuid = grm.project_uuid)  (cost=0.255 rows=1) (actual time=0.0148..0.0149 rows=1 loops=8)
+

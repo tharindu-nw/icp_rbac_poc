@@ -1,0 +1,12 @@
+servicePort = 9090
+
+# Database Configuration
+[icp_rbac_poc.storage]
+host = "localhost"
+port = 3306
+name = "icp_rbac_poc"
+username = "localdbuser"
+password = "admin"
+maxOpenConnections = 10
+maxConnectionLifeTime = 1800  # 30 minutes in seconds
+minIdleConnections = 5

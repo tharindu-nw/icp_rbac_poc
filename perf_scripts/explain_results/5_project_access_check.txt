@@ -1,0 +1,16 @@
+EXPLAIN
+-> Aggregate: count(0)  (cost=16..16 rows=1) (actual time=1.51..1.51 rows=1 loops=1)
+    -> Table scan on v_user_project_access  (cost=12.6..14.7 rows=5.87) (actual time=1.45..1.45 rows=0 loops=1)
+        -> Union materialize with deduplication  (cost=12.1..12.1 rows=5.87) (actual time=1.45..1.45 rows=0 loops=1)
+            -> Table scan on <temporary>  (cost=3.44..3.44 rows=1) (actual time=1.16..1.16 rows=0 loops=1)
+                -> Temporary table with deduplication  (cost=0.93..0.93 rows=1) (actual time=1.16..1.16 rows=0 loops=1)
+                    -> Nested loop inner join  (cost=0.7 rows=1) (actual time=1.15..1.15 rows=0 loops=1)
+                        -> Index lookup on grm using idx_project_uuid (project_uuid = 'eefcd094-c457-11f0-9fcf-c0a705219895'), with index condition: ((grm.project_uuid = 'eefcd094-c457-11f0-9fcf-c0a705219895') and (grm.project_uuid is not null))  (cost=0.35 rows=1) (actual time=0.608..0.612 rows=1 loops=1)
+                        -> Single-row covering index lookup on gum using unique_group_user (group_id = grm.group_id, user_uuid = 'eedfad02-c457-11f0-9fcf-c0a705219895')  (cost=0.35 rows=1) (actual time=0.54..0.54 rows=0 loops=1)
+            -> Table scan on <temporary>  (cost=5.31..7.34 rows=4.87) (actual time=0.271..0.271 rows=0 loops=1)
+                -> Temporary table with deduplication  (cost=4.79..4.79 rows=4.87) (actual time=0.27..0.27 rows=0 loops=1)
+                    -> Nested loop inner join  (cost=3.66 rows=4.87) (actual time=0.261..0.261 rows=0 loops=1)
+                        -> Index lookup on gum using idx_user_uuid (user_uuid = 'eedfad02-c457-11f0-9fcf-c0a705219895')  (cost=1.75 rows=5) (actual time=0.0426..0.0473 rows=5 loops=1)
+                        -> Filter: ((grm.org_uuid = 'eed8df4a-c457-11f0-9fcf-c0a705219895') and (grm.org_uuid is not null) and (grm.env_uuid is null))  (cost=0.293 rows=0.975) (actual time=0.0421..0.0421 rows=0 loops=5)
+                            -> Index lookup on grm using idx_group_project (group_id = gum.group_id, project_uuid = NULL), with index condition: (grm.project_uuid is null)  (cost=0.293 rows=1.09) (actual time=0.0206..0.0363 rows=3.4 loops=5)
+
