@@ -19,7 +19,7 @@ public isolated function getUserProjects(string userUuid) returns ProjectWithAcc
         ORDER BY p.project_name
     `;
 
-    sql:Client dbClient = check getDbClient();
+    sql:Client dbClient = getDbClient();
     stream<ProjectWithAccess, sql:Error?> resultStream = dbClient->query(query);
     
     ProjectWithAccess[] projects = check from ProjectWithAccess project in resultStream
@@ -70,7 +70,7 @@ public isolated function getUserEnvironments(string userUuid, string? projectUui
         `;
     }
 
-    sql:Client dbClient = check getDbClient();
+    sql:Client dbClient = getDbClient();
     stream<EnvironmentWithAccess, sql:Error?> resultStream = dbClient->query(query);
     
     EnvironmentWithAccess[] environments = check from EnvironmentWithAccess env in resultStream
@@ -89,7 +89,7 @@ public isolated function checkProjectAccess(string userUuid, string projectUuid)
           AND project_uuid = ${projectUuid}
     `;
 
-    sql:Client dbClient = check getDbClient();
+    sql:Client dbClient = getDbClient();
     int count = check dbClient->queryRow(query);
     
     return count > 0;
@@ -104,7 +104,7 @@ public isolated function checkEnvironmentAccess(string userUuid, string envUuid)
           AND env_uuid = ${envUuid}
     `;
 
-    sql:Client dbClient = check getDbClient();
+    sql:Client dbClient = getDbClient();
     int count = check dbClient->queryRow(query);
     
     return count > 0;
