@@ -4,7 +4,7 @@ import ballerina/sql;
 import ballerina/time;
 
 // Get all projects accessible by a user
-public function getUserProjects(string userUuid) returns ProjectWithAccess[]|error {
+public isolated function getUserProjects(string userUuid) returns ProjectWithAccess[]|error {
     sql:ParameterizedQuery query = `
         SELECT DISTINCT
             p.project_uuid,
@@ -30,7 +30,7 @@ public function getUserProjects(string userUuid) returns ProjectWithAccess[]|err
 }
 
 // Get all environments accessible by a user (optionally filtered by project)
-public function getUserEnvironments(string userUuid, string? projectUuid = ()) returns EnvironmentWithAccess[]|error {
+public isolated function getUserEnvironments(string userUuid, string? projectUuid = ()) returns EnvironmentWithAccess[]|error {
     sql:ParameterizedQuery query;
     
     if projectUuid is string {
@@ -81,7 +81,7 @@ public function getUserEnvironments(string userUuid, string? projectUuid = ()) r
 }
 
 // Check if user has access to a specific project
-public function checkProjectAccess(string userUuid, string projectUuid) returns boolean|error {
+public isolated function checkProjectAccess(string userUuid, string projectUuid) returns boolean|error {
     sql:ParameterizedQuery query = `
         SELECT COUNT(*) as count
         FROM v_user_project_access
@@ -96,7 +96,7 @@ public function checkProjectAccess(string userUuid, string projectUuid) returns 
 }
 
 // Check if user has access to a specific environment
-public function checkEnvironmentAccess(string userUuid, string envUuid) returns boolean|error {
+public isolated function checkEnvironmentAccess(string userUuid, string envUuid) returns boolean|error {
     sql:ParameterizedQuery query = `
         SELECT COUNT(*) as count
         FROM v_user_environment_access
@@ -111,7 +111,7 @@ public function checkEnvironmentAccess(string userUuid, string envUuid) returns 
 }
 
 // Helper function to measure query execution time
-public function measureQueryTime(function () returns any|error queryFn) returns [any|error, decimal] {
+public isolated function measureQueryTime(isolated function () returns any|error queryFn) returns [any|error, decimal] {
     time:Utc startTime = time:utcNow();
     any|error result = queryFn();
     time:Utc endTime = time:utcNow();

@@ -10,8 +10,8 @@ configurable int servicePort = 9090;
 service /api/v1 on new http:Listener(servicePort) {
 
     // List all projects accessible by a user
-    resource function get users/[string userId]/projects() returns storage:ProjectListResponse|storage:ErrorResponse {
-        var [result, queryTime] = storage:measureQueryTime(function() returns storage:ProjectWithAccess[]|error {
+    isolated resource function get users/[string userId]/projects() returns storage:ProjectListResponse|storage:ErrorResponse {
+        var [result, queryTime] = storage:measureQueryTime(isolated function() returns storage:ProjectWithAccess[]|error {
             return storage:getUserProjects(userId);
         });
 
@@ -46,9 +46,9 @@ service /api/v1 on new http:Listener(servicePort) {
     }
 
     // List all environments accessible by a user (optionally filtered by project)
-    resource function get users/[string userId]/environments(string? project_id = ()) 
+    isolated resource function get users/[string userId]/environments(string? project_id = ()) 
             returns storage:EnvironmentListResponse|storage:ErrorResponse {
-        var [result, queryTime] = storage:measureQueryTime(function() returns storage:EnvironmentWithAccess[]|error {
+        var [result, queryTime] = storage:measureQueryTime(isolated function() returns storage:EnvironmentWithAccess[]|error {
             return storage:getUserEnvironments(userId, project_id);
         });
 
@@ -88,9 +88,9 @@ service /api/v1 on new http:Listener(servicePort) {
     }
 
     // Check if user has access to a specific project
-    resource function get users/[string userId]/'check/project/[string projectId]() 
+    isolated resource function get users/[string userId]/'check/project/[string projectId]() 
             returns storage:AccessCheckResponse|storage:ErrorResponse {
-        var [result, queryTime] = storage:measureQueryTime(function() returns boolean|error {
+        var [result, queryTime] = storage:measureQueryTime(isolated function() returns boolean|error {
             return storage:checkProjectAccess(userId, projectId);
         });
 
@@ -117,9 +117,9 @@ service /api/v1 on new http:Listener(servicePort) {
     }
 
     // Check if user has access to a specific environment
-    resource function get users/[string userId]/'check/environment/[string envId]() 
+    isolated resource function get users/[string userId]/'check/environment/[string envId]() 
             returns storage:AccessCheckResponse|storage:ErrorResponse {
-        var [result, queryTime] = storage:measureQueryTime(function() returns boolean|error {
+        var [result, queryTime] = storage:measureQueryTime(isolated function() returns boolean|error {
             return storage:checkEnvironmentAccess(userId, envId);
         });
 
